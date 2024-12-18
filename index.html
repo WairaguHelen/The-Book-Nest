@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Library</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <h2>Virtual Library</h2>
+      <nav>
+        <ul>
+          <li><a href="#" id="search-link">Search Books</a></li>
+          <li><a href="#" id="favorites-link">Favorites</a></li>
+          <li><a href="#" id="currently-reading-link">Currently Reading</a></li>
+          <li><a href="#" id="want-to-read-link">Want to Read</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="content">
+      <div id="search-section">
+        <h1>Search Books</h1>
+        <input type="text" id="search-bar" placeholder="Enter book title, author, or genre">
+        <button id="search-button">Search</button>
+        <div id="results"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
