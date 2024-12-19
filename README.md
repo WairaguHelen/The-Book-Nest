@@ -1,6 +1,7 @@
 # The Book Nest SPA
 # Project Description
 The Book Nest is a Single Page Application (SPA) that allows users to search for books using the Google Books API and organize them into virtual bookshelves: Favorites, Currently Reading, and Want to Read. Users can view detailed information about each book, manage their bookshelves by rearranging books between categories, and remove books from their shelves.
+Here is the live link to the project: https://wairaguhelen.github.io/The-Book-Nest/
 # Features
 # 1. Search for Books
 •	Users can search for books by title, author, or keyword using the Google Books API.
