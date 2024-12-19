@@ -2,14 +2,14 @@ const searchBar = document.getElementById("search-bar");
 const searchButton = document.getElementById("search-button");
 const resultsContainer = document.getElementById("results");
 
-// Virtual API: Bookshelves stored as arrays
+// Storing the book shelves as arrays
 let bookshelves = {
   favorites: [],
   currentlyReading: [],
   wantToRead: [],
 };
 
-// Fetch books from Google Books API (GET)
+// Search button functionality
 async function fetchBooks(query) {
   try {
     const response = await fetch(
@@ -23,7 +23,6 @@ async function fetchBooks(query) {
   }
 }
 
-// Display search results
 function displayBooks(books) {
   resultsContainer.innerHTML = ""; // Clear previous results
   books.forEach((book) => {
@@ -48,40 +47,6 @@ function displayBooks(books) {
   });
 }
 
-// POST: Add book to a shelf
-function addBookToShelf(title, shelf) {
-  if (!bookshelves[shelf].find((book) => book.title === title)) {
-    bookshelves[shelf].push({ title });
-    alert(`${title} added to ${shelf.replace(/([A-Z])/g, " $1")}.`);
-  } else {
-    alert(`${title} is already in ${shelf.replace(/([A-Z])/g, " $1")}.`);
-  }
-}
-
-// PATCH: Move book from one shelf to another
-function moveBookToShelf(title, fromShelf, toShelf) {
-  const bookIndex = bookshelves[fromShelf].findIndex((book) => book.title === title);
-  if (bookIndex > -1) {
-    const [book] = bookshelves[fromShelf].splice(bookIndex, 1); // Remove from current shelf
-    bookshelves[toShelf].push(book); // Add to new shelf
-    alert(`${title} moved to ${toShelf.replace(/([A-Z])/g, " $1")}.`);
-  } else {
-    alert(`${title} not found in ${fromShelf.replace(/([A-Z])/g, " $1")}.`);
-  }
-}
-
-// DELETE: Remove book from a shelf
-function removeBookFromShelf(title, shelf) {
-  const bookIndex = bookshelves[shelf].findIndex((book) => book.title === title);
-  if (bookIndex > -1) {
-    bookshelves[shelf].splice(bookIndex, 1); // Remove book
-    alert(`${title} removed from ${shelf.replace(/([A-Z])/g, " $1")}.`);
-  } else {
-    alert(`${title} not found in ${shelf.replace(/([A-Z])/g, " $1")}.`);
-  }
-}
-
-// Search Button Event Listener
 searchButton.addEventListener("click", async () => {
   const query = searchBar.value.trim();
   if (!query) {
@@ -92,28 +57,7 @@ searchButton.addEventListener("click", async () => {
   displayBooks(books);
 });
 
-// View Books in Shelves (Simulates GET)
-function viewShelf(shelf) {
-  const shelfBooks = bookshelves[shelf];
-  resultsContainer.innerHTML = `<h2>${shelf.replace(/([A-Z])/g, " $1")}</h2>`;
-  shelfBooks.forEach((book) => {
-    const bookElement = document.createElement("div");
-    bookElement.className = "book";
-    bookElement.innerHTML = `
-      <h3>${book.title}</h3>
-      <button onclick="removeBookFromShelf('${book.title}', '${shelf}')">Remove</button>
-    `;
-    resultsContainer.appendChild(bookElement);
-  });
-}
-
-// Event Listeners for Shelves
-document.getElementById("favorites-link").addEventListener("click", () => viewShelf("favorites"));
-document.getElementById("currently-reading-link").addEventListener("click", () => viewShelf("currentlyReading"));
-document.getElementById("want-to-read-link").addEventListener("click", () => viewShelf("wantToRead"));
-
-// CODE TO VIEW BOOK DETAILS
-// Get modal elements
+// Viewing book details
 const modal = document.getElementById("book-details-modal");
 const modalContentDetails = document.getElementById("modal-content-details");
 const closeModal = document.getElementById("close-modal");
@@ -139,15 +83,67 @@ function openBookDetails(book) {
 
 // Close modal
 closeModal.addEventListener("click", () => {
-  modal.style.display = "none"; // Hide the modal
+  modal.style.display = "none";
 });
 
-// Add functionality to close modal when clicking outside of it
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
     modal.style.display = "none";
   }
 });
+
+// Adding book to different categories
+function addBookToShelf(title, shelf) {
+  if (!bookshelves[shelf].find((book) => book.title === title)) {
+    bookshelves[shelf].push({ title });
+    alert(`${title} added to ${shelf.replace(/([A-Z])/g, " $1")}.`);
+  } else {
+    alert(`${title} is already in ${shelf.replace(/([A-Z])/g, " $1")}.`);
+  }
+}
+
+// View Books in the assigned folders
+function viewShelf(shelf) {
+  const shelfBooks = bookshelves[shelf];
+  resultsContainer.innerHTML = `<h2>${shelf.replace(/([A-Z])/g, " $1")}</h2>`;
+  shelfBooks.forEach((book) => {
+    const bookElement = document.createElement("div");
+    bookElement.className = "book";
+    bookElement.innerHTML = `
+      <h3>${book.title}</h3>
+      <button onclick="removeBookFromShelf('${book.title}', '${shelf}')">Remove</button>
+    `;
+    resultsContainer.appendChild(bookElement);
+  });
+}
+
+// Moving book from one folder to the other
+function moveBookToShelf(title, fromShelf, toShelf) {
+  const bookIndex = bookshelves[fromShelf].findIndex((book) => book.title === title);
+  if (bookIndex > -1) {
+    const [book] = bookshelves[fromShelf].splice(bookIndex, 1); // Remove from current shelf
+    bookshelves[toShelf].push(book); // Add to new shelf
+    alert(`${title} moved to ${toShelf.replace(/([A-Z])/g, " $1")}.`);
+  } else {
+    alert(`${title} not found in ${fromShelf.replace(/([A-Z])/g, " $1")}.`);
+  }
+}
+
+// Deleting a book from a folder
+function removeBookFromShelf(title, shelf) {
+  const bookIndex = bookshelves[shelf].findIndex((book) => book.title === title);
+  if (bookIndex > -1) {
+    bookshelves[shelf].splice(bookIndex, 1); // Remove book
+    alert(`${title} removed from ${shelf.replace(/([A-Z])/g, " $1")}.`);
+  } else {
+    alert(`${title} not found in ${shelf.replace(/([A-Z])/g, " $1")}.`);
+  }
+}
+
+// Event Listeners for Shelves
+document.getElementById("favorites-link").addEventListener("click", () => viewShelf("favorites"));
+document.getElementById("currently-reading-link").addEventListener("click", () => viewShelf("currentlyReading"));
+document.getElementById("want-to-read-link").addEventListener("click", () => viewShelf("wantToRead"));
 
 // Update displayBooks function to include a button to view details
 function displayBooks(books) {
@@ -220,7 +216,7 @@ function rearrangeBookShelf(title, currentShelf) {
   document.body.appendChild(dropdownContainer);
 }
 
-// View Books in Shelves (Simulates GET)
+// View books in the newly assigned shelves
 function viewShelf(shelf) {
   const shelfBooks = bookshelves[shelf];
   resultsContainer.innerHTML = `<h2>${shelf.replace(/([A-Z])/g, " $1")}</h2>`;
