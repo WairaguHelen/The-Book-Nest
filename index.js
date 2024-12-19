@@ -12,12 +12,13 @@ let bookshelves = {
 // Search button functionality
 async function fetchBooks(query) {
   try {
-    const response = await fetch(
+      const response = await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=${query}`
     );
     const data = await response.json();
     return data.items || [];
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error fetching books:", error);
     return [];
   }
@@ -28,14 +29,14 @@ function displayBooks(books) {
   books.forEach((book) => {
     const bookElement = document.createElement("div");
     bookElement.className = "book";
-
     const title = book.volumeInfo.title || "Unknown Title";
     const authors = book.volumeInfo.authors?.join(", ") || "Unknown Author";
     const thumbnail =
       book.volumeInfo.imageLinks?.thumbnail ||
       "https://via.placeholder.com/100x150?text=No+Image";
 
-    bookElement.innerHTML = `
+
+      bookElement.innerHTML = `
       <img src="${thumbnail}" alt="${title}">
       <h3>${title}</h3>
       <p>${authors}</p>
@@ -48,7 +49,7 @@ function displayBooks(books) {
 }
 
 searchButton.addEventListener("click", async () => {
-  const query = searchBar.value.trim();
+   const query = searchBar.value.trim();
   if (!query) {
     alert("Please enter a search term.");
     return;
@@ -57,7 +58,7 @@ searchButton.addEventListener("click", async () => {
   displayBooks(books);
 });
 
-// Viewing book details
+// The book details
 const modal = document.getElementById("book-details-modal");
 const modalContentDetails = document.getElementById("modal-content-details");
 const closeModal = document.getElementById("close-modal");
@@ -70,7 +71,7 @@ function openBookDetails(book) {
   const publishedDate = book.volumeInfo.publishedDate || "Unknown";
   const pageCount = book.volumeInfo.pageCount || "N/A";
 
-  modalContentDetails.innerHTML = `
+   modalContentDetails.innerHTML = `
     <h2>${title}</h2>
     <p><strong>Author(s):</strong> ${authors}</p>
     <p><strong>Published Date:</strong> ${publishedDate}</p>
@@ -102,7 +103,7 @@ function addBookToShelf(title, shelf) {
   }
 }
 
-// View Books in the assigned folders
+// View books in the assigned folders
 function viewShelf(shelf) {
   const shelfBooks = bookshelves[shelf];
   resultsContainer.innerHTML = `<h2>${shelf.replace(/([A-Z])/g, " $1")}</h2>`;
