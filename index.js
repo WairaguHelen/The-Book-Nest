@@ -35,14 +35,13 @@ function displayBooks(books) {
       book.volumeInfo.imageLinks?.thumbnail ||
       "https://via.placeholder.com/100x150?text=No+Image";
 
-
       bookElement.innerHTML = `
       <img src="${thumbnail}" alt="${title}">
       <h3>${title}</h3>
       <p>${authors}</p>
-      <button onclick="addBookToShelf('${title}', 'favorites')">Add to Favorites</button>
-      <button onclick="addBookToShelf('${title}', 'currentlyReading')">Currently Reading</button>
-      <button onclick="addBookToShelf('${title}', 'wantToRead')">Want to Read</button>
+      <button onclick="addBook('${title}', 'favorites')">Add to Favorites</button>
+      <button onclick="addBook('${title}', 'currentlyReading')">Currently Reading</button>
+      <button onclick="addBook('${title}', 'wantToRead')">Want to Read</button>
     `;
     resultsContainer.appendChild(bookElement);
   });
@@ -59,9 +58,9 @@ searchButton.addEventListener("click", async () => {
 });
 
 // The book details
-const modal = document.getElementById("book-details-modal");
+const modal = document.getElementById("more-info");
 const modalContentDetails = document.getElementById("modal-content-details");
-const closeModal = document.getElementById("close-modal");
+const closeModal = document.getElementById("close");
 
 // Open modal and display book details
 function openBookDetails(book) {
@@ -94,7 +93,7 @@ window.addEventListener("click", (event) => {
 });
 
 // Adding book to different categories
-function addBookToShelf(title, shelf) {
+function addBook(title, shelf) {
   if (!bookshelves[shelf].find((book) => book.title === title)) {
     bookshelves[shelf].push({ title });
     alert(`${title} added to ${shelf.replace(/([A-Z])/g, " $1")}.`);
@@ -112,7 +111,7 @@ function viewShelf(shelf) {
     bookElement.className = "book";
     bookElement.innerHTML = `
       <h3>${book.title}</h3>
-      <button onclick="removeBookFromShelf('${book.title}', '${shelf}')">Remove</button>
+      <button onclick="removeBook('${book.title}', '${shelf}')">Remove</button>
     `;
     resultsContainer.appendChild(bookElement);
   });
@@ -131,7 +130,7 @@ function moveBookToShelf(title, fromShelf, toShelf) {
 }
 
 // Deleting a book from a folder
-function removeBookFromShelf(title, shelf) {
+function removeBook(title, shelf) {
   const bookIndex = bookshelves[shelf].findIndex((book) => book.title === title);
   if (bookIndex > -1) {
     bookshelves[shelf].splice(bookIndex, 1); // Remove book
@@ -142,9 +141,9 @@ function removeBookFromShelf(title, shelf) {
 }
 
 // Event Listeners for Shelves
-document.getElementById("favorites-link").addEventListener("click", () => viewShelf("favorites"));
-document.getElementById("currently-reading-link").addEventListener("click", () => viewShelf("currentlyReading"));
-document.getElementById("want-to-read-link").addEventListener("click", () => viewShelf("wantToRead"));
+document.getElementById("favorites").addEventListener("click", () => viewShelf("favorites"));
+document.getElementById("current-read").addEventListener("click", () => viewShelf("currentlyReading"));
+document.getElementById("to-read").addEventListener("click", () => viewShelf("wantToRead"));
 
 // Update displayBooks function to include a button to view details
 function displayBooks(books) {
@@ -164,16 +163,16 @@ function displayBooks(books) {
       <h3>${title}</h3>
       <p>${authors}</p>
       <button onclick="openBookDetails(${JSON.stringify(book).replace(/"/g, '&quot;')})">View Details</button>
-      <button onclick="addBookToShelf('${title}', 'favorites')">Add to Favorites</button>
-      <button onclick="addBookToShelf('${title}', 'currentlyReading')">Currently Reading</button>
-      <button onclick="addBookToShelf('${title}', 'wantToRead')">Want to Read</button>
+      <button onclick="addBook('${title}', 'favorites')">Add to Favorites</button>
+      <button onclick="addBook('${title}', 'currentlyReading')">Currently Reading</button>
+      <button onclick="addBook('${title}', 'wantToRead')">Want to Read</button>
     `;
     resultsContainer.appendChild(bookElement);
   });
 }
 
-// Rearrange Book Shelf (Move book to another category with dropdown)
-function rearrangeBookShelf(title, currentShelf) {
+// Rearrange Book Shelf with dropdown
+function rearrangeShelf(title, currentShelf) {
   const dropdown = document.createElement("select");
   dropdown.className = "rearrange-dropdown";
 
@@ -226,9 +225,10 @@ function viewShelf(shelf) {
     bookElement.className = "book";
     bookElement.innerHTML = `
       <h3>${book.title}</h3>
-      <button onclick="rearrangeBookShelf('${book.title}', '${shelf}')">Rearrange</button>
-      <button onclick="removeBookFromShelf('${book.title}', '${shelf}')">Remove</button>
+      <button onclick="rearrangeShelf('${book.title}', '${shelf}')">Rearrange</button>
+      <button onclick="removeBook('${book.title}', '${shelf}')">Remove</button>
     `;
     resultsContainer.appendChild(bookElement);
   });
 }
+
